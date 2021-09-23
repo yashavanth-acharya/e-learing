@@ -1,0 +1,226 @@
+{% extends "index.html"%}
+
+{% load static %}
+
+{% block title %}
+Home
+{% endblock title %} 
+
+{% block mainblock %}
+
+<header class="masthead" style="background-image:url({% static '/img/header-bg.jpg' %});">
+    <div class="container">
+        <div class="intro-text">
+            <div class="intro-lead-in"><span style="background: var(--bs-dark);">Welcome!</span></div>
+            <div class="intro-heading text-uppercase"><span style="border-color: rgb(18,2,2);text-shadow: 0px 0px var(--bs-dark);background: var(--bs-dark);">It's Nice To Meet You</span></div>
+            <a class="btn btn-primary btn-xl text-uppercase" role="button" href="Course">view Course</a>
+        </div>
+    </div>
+</header>
+<section class="bg-light" id="team">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="team-member"><img class="rounded-circle mx-auto" src="{% static 'img/team/vishmitha.jpeg'%}">
+                    <h4>Vishmitha</h4>
+                    <p class="text-muted"></p>
+                    <ul class="list-inline social-buttons">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="team-member"><img class="rounded-circle mx-auto" src="{% static 'img/team/ranjitha.jpeg'%}">
+                    <h4>Ranjitha</h4>
+                    <p class="text-muted"></p>
+                    <ul class="list-inline social-buttons">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="team-member"><img class="rounded-circle mx-auto" src="{% static 'img/team/padmakshi.jpeg'%}">
+                    <h4>Padmakshi</h4>
+                    <p class="text-muted"></p>
+                    <ul class="list-inline social-buttons">
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="contact" style="background-image:url({% static 'img/map-image.png'%});">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="text-uppercase section-heading">Contact Us</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <form id="contactForm" name="contactForm" novalidate="novalidate">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="text" id="name" placeholder="Your Name *" required="">
+                                <small class="form-text text-danger flex-grow-1 help-block lead name-error"></small></div>
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="email" id="email" placeholder="Your Email *" required="">
+                                <small class="form-text text-danger help-block lead email-error"></small></div>
+                            <div class="form-group mb-3">
+                                <input class="form-control" type="tel" id="mobile" placeholder="Your Phone *" required="">
+                                <small class="form-text text-danger help-block lead mobile-error"></small></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <textarea class="form-control" id="message" placeholder="Your Message *" required=""></textarea>
+                                <small class="form-text text-danger help-block lead msg-error"></small></div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-lg-12 text-center">
+                            <div id="success"></div><button class="btn btn-primary btn-xl text-uppercase" id="sendMessageButton" type="button">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock mainblock%} 
+
+
+{% block js %}
+<script src="{% static 'js/agency.js'%}"></script>
+<script>
+    $("#sendMessageButton").click(function(e) {
+        let emailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        let mob_regex=/^[0][1-9]\d{9}$|^[1-9]\d{9}$/
+        function showerror(tag,errortag){
+            if(tag.val().length==0){
+                errortag.html("Required *")
+                tag.addClass("errorborder")
+                return false
+            }else{
+                tag.removeClass("errorborder")
+                return true
+            }
+        }
+
+        function validate(type,tag,errortag){
+
+            if(type=="phone"){
+
+                if(!tag.val().match(mob_regex)){
+                    errortag.html("Invalid Phone number")
+                    tag.addClass("errorborder")
+                    return false
+                   }
+                   else{
+                    tag.removeClass("errorborder")
+                    return true
+                   }
+            }
+
+
+            if(type=="email"){
+
+                if(!tag.val().match(emailregex)){
+                    errortag.html("Invalid EmailID")
+                    tag.addClass("errorborder")
+                    return false
+                    }
+                    else{
+                    tag.removeClass("errorborder")
+                    return true
+                    }
+
+                }
+
+            if(type=="msg"){
+
+                if(!tag.val().length>600){
+                    errortag.html("Message is too long")
+                    tag.addClass("errorborder")
+                    return false
+                    }
+                    else{
+                    tag.removeClass("errorborder")
+                    return true
+                    }
+        
+            }
+            }
+
+        let error1=true,error2=true,error3=true,error4=true
+
+        let name=$("#name")
+        let email=$("#email")
+        let mobile=$("#mobile")
+        let msg=$("#message")
+
+
+        let nameerror=$(".name-error")
+        let emailerror=$(".email-error")
+        let mobileerror=$(".mobile-error")
+        let msgerror=$(".msg-error")
+
+
+        nameerror.html("")
+        emailerror.html("")
+        mobileerror.html("")
+        msgerror.html("")
+
+
+        error1=showerror(name,nameerror)
+        error2=showerror(email,emailerror)
+        error3=showerror(mobile,mobileerror)
+        error4=showerror(msg,msgerror)
+
+        
+        if(error4){
+            error4=validate("msg",msg,msgerror)
+        }
+        if(error2){
+            error3=validate("email",email,emailerror)
+        }
+        if(error3){
+            error4=validate("phone",mobile,mobileerror)
+        }
+
+        if(error1 && error2 && error3 && error4){
+
+            $.ajax({
+                url:"/contactus",
+                method:"POST",
+                data:{
+                "name":$("#name").val(),
+                "email":$("#email").val(),
+                "phone":$("#mobile").val(),
+                "msg":$("#message").val()},
+                success:function(data){
+                    
+                    if(data.error==0){
+                        alert(data.data)
+                    }else{
+                        alert(data.data)
+                    }
+                    $("form").trigger("reset")
+                },
+                error:function(data){
+                    console.log(data)
+                }
+            })
+
+        }
+
+    })
+</script>
+{% endblock js %}

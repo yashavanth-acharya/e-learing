@@ -1,0 +1,38 @@
+# docker-build:
+#   # Official docker image.
+#   image: docker:latest
+#   stage: build
+#   services:
+#     - docker:dind
+#   before_script:
+#     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    
+#   script:
+#     - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+#     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+
+
+azure-deploy-release:
+  
+  image: registry.gitlab.com/y_a_s_h/elearning:main
+  stage: deploy
+  
+  image: mcr.microsoft.com/azure-cli
+  script:
+      - az login --name mycli
+    # - az resource update --resource-group webapp --name scm --namespace Microsoft.Web --resource-type basicPublishingCredentialsPolicies --parent sites/elearningwebapp --set properties.allow=false
+    # - az webapp deployment user set --user-name elearningwebapp\$elearningwebapp --password gEfSDWGEXwxXYTBBSbnfCfgkkRnEcmrYCbgDrm9pEYPHf7NS1F0W2f8hg5nr
+      - az webapp config set --name elearningwebapp --resource-group webapp --ftps-state FtpsOnly
+  only:
+    - main
+
+    
+# ecs-deploy-dev:
+#   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-ecs:latest
+#   stage: deploy
+#   script:
+#     - aws ecs update-service --cluster "soil-v2-cluster" --service "krishirasta-web-dev" --force-new-deployment
+#   only:
+#     - web-dev
+
+# Yash@!1357

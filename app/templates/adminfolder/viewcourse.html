@@ -1,0 +1,242 @@
+
+{% extends "adminfolder/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Courses
+{% endblock title %} 
+{% block style %}
+<style>
+    .errorlable{
+        color: red
+    }
+    .errorborder{
+        border:1px solid red;
+    }
+</style>
+
+{%endblock style %}
+{% block content %}
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">Courses</h3>
+    <p class="text-primary m-0 fw-bold" id="msg"></p>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <button class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#modal1" type="button">Add course</button>
+           
+            
+        </div>
+        <div class="card-body">
+            <div class="row table-responsive">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Courses name</th>
+                            <th>Course Descriptions</th>
+                            <th>Course image</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Courses name</th>
+                            <th>Course Descriptions</th>
+                            <th>Course image</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+</div>
+</div>
+<div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new course</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg1"></span>
+            <div class="col-12">
+            <div class="mb-3">
+                <label for="image" id="icon-error">Course icon</label>
+                <input class="form-control" onchange="courseicon('image')"  accept="image/*" id="image" name="image"  type="file">
+            </div>
+            <span id="iconerror" class="text-danger">
+              </span> 
+            </div>
+            <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="name" placeholder="">
+                <label for="name" id="name-error" >Course name</label>
+              </div>
+              <span id="coursename-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+              <div class="form-floating">
+                <textarea class="form-control"  id="descriptions" style="height: 100px"></textarea>
+                <label for="descriptions" id="descriptions-error">Descriptions</label>
+            </div>
+            <span id="course-description-error" class="text-danger">
+              
+              </span>  
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="addcourses" >Add</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  
+
+
+  <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Edit course</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg2"></span>
+            <div class="col-12">
+            <div class="mb-3">
+                <label for="editimage" id="editicon-error">Course icon</label>
+                <input class="form-control" onchange="editcourseicon('editimage')"  accept="image/*" id="editimage" name="image"  type="file">
+            </div>
+            <span id="editiconerror" class="text-danger">
+              </span> 
+            </div>
+            <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="editname" placeholder="">
+                <label for="name" id="editname-error" >Course name</label>
+              </div>
+              <span id="editcoursename-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+              <div class="form-floating">
+                <textarea class="form-control"  id="editdescriptions" style="height: 100px"></textarea>
+                <label for="descriptions" id="editdescriptions-error">Descriptions</label>
+            </div>
+            <span id="editcourse-description-error" class="text-danger">
+              
+              </span>  
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="updatecourse" >Udpate</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+
+ 
+
+{% endblock content%} 
+{% block js %}
+<script src="{% static 'js/addcourse.js' %}"></script>
+<script src="{% static 'js/editcourse.js' %}"></script>
+<script>
+  function courseicon(id) {
+    var file = document.getElementById(id)['files'][0];
+  
+    var reader = new FileReader();
+    
+      
+    reader.onload = function () {
+        base64String = reader.result  
+        imageBase64Stringsep = base64String;
+  
+        localStorage.setItem("courseicon",imageBase64Stringsep)
+    }
+    reader.readAsDataURL(file);
+  }
+
+  function editcourseicon(id) {
+    var file = document.getElementById(id)['files'][0];
+    var reader = new FileReader();
+    reader.onload = function () {
+        base64String = reader.result  
+        imageBase64Stringsep = base64String;
+  
+        localStorage.setItem("editcourseicon",imageBase64Stringsep)
+    }
+    reader.readAsDataURL(file);
+  }
+
+
+  function deletecourse(id){
+    if (confirm("Are you sure you want to delete")){
+      $.ajax({
+        url:"deletecourse",
+        method:"GET",
+        data:{"couserid":id},
+        success:function(data){
+          
+            if(data.error==0){
+              echo=`<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }else{
+              echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }
+            $('#example').DataTable().ajax.reload();
+        }
+    })
+    }
+} 
+
+function Activtecourse(id){
+  $.ajax({
+    url:"coursestatus",
+    method:"GET",
+    data:{"course_id":id},
+    success:function(data){
+        if(data.error==0){
+          $('#example').DataTable().ajax.reload();
+        }else{
+          echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Done</strong> `+data.msg+`.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+          $("#msg").append(echo)
+        }
+        
+    }
+})
+
+}
+
+</script>
+{% endblock js %}

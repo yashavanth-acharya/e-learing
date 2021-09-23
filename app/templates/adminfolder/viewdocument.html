@@ -1,0 +1,219 @@
+
+{% extends "adminfolder/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Topics document
+{% endblock title %} 
+{% block style %}
+
+<style>
+    .errorlable{
+        color: red
+    }
+    .errorborder{
+        border:1px solid red;
+    }
+</style>
+
+{%endblock style %}
+{% block content %}
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">Topic documents</h3>
+    <p class="text-primary m-0 fw-bold" id="msg"></p>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <button class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#modal1" type="button">Add document</button>
+           
+            
+        </div>
+        <div class="card-body">
+            <div class="row table-responsive">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Topic name</th>
+                            <th>Documents</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Topic name</th>
+                            <th>Documents</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new document</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg1"></span>
+
+          <div class="col-12">
+            <div class="form-floating mb-3">
+            <select class="form-select" id="topicname" aria-label="Select course">
+                <option selected value="">Open this select menu</option>
+                {%for i in data%}
+                <option value="{{i.topicid}}">{{i.topicname}}</option>
+                {%endfor %}                
+                </select>
+            <label for="topicname" id="topicname-error" >Select topic</label>
+          </div>
+          <span id="topicname-error" class="text-danger">
+          </span>
+          </div>
+
+            <div class="col-12">
+            <div class="mb-3">
+                <label for="document" id="document-error">Document</label>
+                <input class="form-control" onchange="Uploadetopicdocuments('document')"  accept="application/pdf" id="document" name="document"  type="file">
+            </div>
+            <span id="documenterror" class="text-danger">
+              </span> 
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="addtopicdocument" >Add</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  
+  
+
+    
+
+  <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Edit topic document</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg2"></span>
+
+            <div class="col-12">
+            <div class="form-floating mb-3">
+            <select class="form-select" id="edittopicname" aria-label="Select course">
+                <option selected value="">Open this select menu</option>
+                {%for i in data%}
+                <option value="{{i.topicid}}">{{i.topicname}}</option>
+                {%endfor %}
+                </select>
+            <label for="edittopicname" id="edittopicname-lable" >Select course</label>
+          </div>
+          <span id="edittopicname-error" class="text-danger">
+          </span>
+          </div>
+
+            <div class="col-12">
+            <div class="mb-3">
+                <label for="editdocument" id="editdocument-error">Document</label>
+                <input class="form-control" onchange="edittopicdocument('editdocument')"  accept="application/pdf" id="editdocument" name="editdocument"  type="file">
+            </div>
+            <span id="editdocumenterror" class="text-danger">
+              </span> 
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="edittopicdocument-btn" >Udpate</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+
+ 
+
+{% endblock content%} 
+{% block js %}
+<script>
+  let tables=$('#example').DataTable({"processing": true,"pageLength": 10,ajax: 'getdocument'});
+
+  function Uploadetopicdocuments(id){
+    var file = document.getElementById(id)['files'][0];
+    var reader = new FileReader();
+    reader.onload = function () {
+        base64String = reader.result  
+        imageBase64Stringsep = base64String;
+  
+        localStorage.setItem("topicdocuments",imageBase64Stringsep)
+    }
+    reader.readAsDataURL(file);
+  }
+
+
+  function edittopicdocument(id){
+    var file = document.getElementById(id)['files'][0];
+    var reader = new FileReader();     
+    reader.onload = function () {
+        base64String = reader.result  
+        imageBase64Stringsep = base64String;
+        localStorage.setItem("edittopicdocuments",imageBase64Stringsep)
+    }
+    reader.readAsDataURL(file);
+  }
+
+
+  function deletetopicdocument(id){
+    if (confirm("Are you sure you want to document")){
+      $("#msg").empty()
+      $.ajax({
+        url:"deletedocument",
+        method:"POST",
+        data:{"id":id},
+        success:function(data){
+            if(data.error==0){
+              echo=`<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }else{
+              echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }
+            tables.ajax.reload();
+        }
+    })
+    }
+} 
+
+
+</script>
+<script src="{% static 'js/adddocument.js' %}"></script>
+<script src="{% static 'js/editdocument.js' %}"></script>
+
+{% endblock js %}

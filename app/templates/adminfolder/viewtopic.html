@@ -1,0 +1,339 @@
+
+{% extends "adminfolder/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Topics
+{% endblock title %} 
+{% block style %}
+
+<style>
+    .errorlable{
+        color: red
+    }
+    .errorborder{
+        border:1px solid red;
+    }
+</style>
+
+{%endblock style %}
+{% block content %}
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">Topics</h3>
+    <p class="text-primary m-0 fw-bold" id="msg"></p>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <button class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#modal1" type="button">Add topic</button>
+           
+            
+        </div>
+        <div class="card-body">
+            <div class="row table-responsive">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Topic name</th>
+                            <th>Topic Descriptions</th>
+                            <th>Topic image</th>
+                            <th>Duration</th>
+                            <th>Marks for pre questions</th>
+                            <th>Pass mark</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Topic name</th>
+                            <th>Topic Descriptions</th>
+                            <th>Topic image</th>
+                            <th>Duration</th>
+                            <th>Marks for pre questions</th>
+                            <th>Pass mark</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+</div>
+
+<div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new Topic</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg1"></span>
+
+          <div class="col-12">
+            <div class="form-floating mb-3">
+            <select class="form-select" id="coursename" aria-label="Select course">
+                <option selected>Open this select menu</option>
+                {%for i in data%}
+                
+                <option value="{{i.courseid}}">{{i.coursename}}</option>
+                
+                {%endfor %}
+                
+                
+                </select>
+            <label for="coursename" id="coursename-error" >Select course</label>
+          </div>
+          <span id="coursename-error" class="text-danger">
+          </span>
+          </div>
+
+            <div class="col-12">
+            <div class="mb-3">
+                <label for="image" id="icon-error">topic icon</label>
+                <input class="form-control" onchange="Uploadetopicicon('image')"  accept="image/*" id="image" name="image"  type="file">
+            </div>
+            <span id="iconerror" class="text-danger">
+              </span> 
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="name" placeholder="">
+                <label for="name" id="name-error" >topic name</label>
+              </div>
+              <span id="topicname-error" class="text-danger">
+              </span>
+              </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="duration" placeholder="">
+                <label for="duration" id="duration-error" >Duration(in minutes)</label>
+              </div>
+              <span id="topicduration-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="mq" placeholder="">
+                <label for="mq" id="mq-error" >Marks for per questions</label>
+              </div>
+              <span id="topicmq-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="passingmark" placeholder="">
+                <label for="passingmark" id="passingmark-error" >Passing Mark</label>
+              </div>
+              <span id="topicpassingmark-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea class="form-control"  id="descriptions" style="height: 100px"></textarea>
+                  <label for="descriptions" id="descriptions-error">Descriptions</label>
+              </div>
+              <span id="topic-description-error" class="text-danger">
+                
+                </span>  
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="addtopic" >Add</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  
+
+
+  <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Edit topic</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg2"></span>
+
+            <div class="col-12">
+            <div class="form-floating mb-3">
+            <select class="form-select" id="editcoursename" aria-label="Select course">
+                <option selected>Open this select menu</option>
+                {%for i in data%}
+                
+                <option value="{{i.courseid}}">{{i.coursename}}</option>
+                
+                {%endfor %}
+                
+                
+                </select>
+            <label for="editcoursename" id="editcoursename-error" >Select course</label>
+          </div>
+          <span id="editcoursename-error" class="text-danger">
+          </span>
+          </div>
+
+            <div class="col-12">
+            <div class="mb-3">
+                <label for="editimage" id="editicon-error">topic icon</label>
+                <input class="form-control" onchange="edittopicimage('editimage')"  accept="image/*" id="editimage" name="image"  type="file">
+            </div>
+            <span id="editiconerror" class="text-danger">
+              </span> 
+            </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="editname" placeholder="">
+                <label for="editname" id="name-error" >topic name</label>
+              </div>
+              <span id="edittopicname-error" class="text-danger">
+              </span>
+              </div>
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="editduration" placeholder="">
+                <label for="editduration" id="editduration-error" >Duration(in minutes)</label>
+              </div>
+              <span id="topicduration-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="editmq" placeholder="">
+                <label for="editmq" id="editmq-error" >Marks for per questions</label>
+              </div>
+              <span id="edittopicmq-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+                <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="editpassingmark" placeholder="">
+                <label for="editpassingmark" id="editpassingmark-error" >Passing Mark</label>
+              </div>
+              <span id="edittopicpassingmark-error" class="text-danger">
+              </span>
+              </div>
+              <div class="col-12">
+                <div class="form-floating">
+                  <textarea class="form-control"  id="editdescriptions" style="height: 100px"></textarea>
+                  <label for="editdescriptions" id="editdescriptions-error">Descriptions</label>
+              </div>
+              <span id="edittopic-description-error" class="text-danger">
+                
+                </span>  
+              </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="updatetopic" >Udpate</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+
+ 
+
+{% endblock content%} 
+{% block js %}
+<script src="{% static 'js/addtopic.js' %}"></script>
+<script src="{% static 'js/edittopic.js' %}"></script>
+<script>
+  function Uploadetopicicon(id) {
+    var file = document.getElementById(id)['files'][0];
+  
+    var reader = new FileReader();
+    console.log("next");
+      
+    reader.onload = function () {
+        base64String = reader.result  
+        imageBase64Stringsep = base64String;
+  
+        localStorage.setItem("topicicons",imageBase64Stringsep)
+    }
+    reader.readAsDataURL(file);
+  }
+
+  function edittopicimage(id) {
+    var file = document.getElementById(id)['files'][0];
+  
+    var reader = new FileReader();
+    console.log("next");
+      
+    reader.onload = function () {
+        base64String = reader.result  
+        imageBase64Stringsep = base64String;
+  
+        localStorage.setItem("edittopicicon",imageBase64Stringsep)
+    }
+    reader.readAsDataURL(file);
+  }
+
+  function deletetopic(id){
+    if (confirm("Are you sure you want to delete")){
+      $("#msg").empty()
+      $.ajax({
+        url:"deletetopic",
+        method:"GET",
+        data:{"topicid":id},
+        success:function(data){
+          
+            if(data.error==0){
+              echo=`<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }else{
+              echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }
+            $('#example').DataTable().ajax.reload();
+        }
+    })
+    }
+} 
+
+function Activtetopic(id){
+  $.ajax({
+    url:"topicstatus",
+    method:"GET",
+    data:{"topicid":id},
+    success:function(data){
+        if(data.error==0){
+          $('#example').DataTable().ajax.reload();
+        }else{
+          echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Done</strong> `+data.msg+`.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`
+          $("#msg").append(echo)
+        }
+        
+    }
+})
+
+}
+
+</script>
+{% endblock js %}

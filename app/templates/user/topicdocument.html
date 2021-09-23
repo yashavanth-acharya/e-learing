@@ -1,0 +1,25 @@
+{% extends "index.html"%}
+
+{% load static %}
+
+{% block title %}
+Couses
+{% endblock title %} 
+{% block style%}
+<link rel="stylesheet" href="{% static 'css/Features-Boxed.css' %}">
+{% endblock style %} 
+
+{% block mainblock %}
+    <section class="features-boxed" style="height: 100vh">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Courses document</h2>
+            </div>
+            <div class="row justify-content-center features">
+                <embed src="{{data}}" width="100%" height="800vh" />
+            </div>
+        </div>
+    </section>
+{% endblock mainblock%} 
+{% block js %}
+{% endblock js %}

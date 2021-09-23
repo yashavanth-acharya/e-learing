@@ -1,0 +1,332 @@
+{% extends "index.html"%}
+
+{% load static %}
+
+{% block title %}
+Signup
+{% endblock title %} 
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/Registration-Form-with-Photo.css'%}">
+<style>
+    @media (max-width:800px) {
+        .image-signup{
+            display: none !important;
+        }
+    }
+
+</style>
+{% endblock style %}
+
+{% block mainblock %}
+<body>
+    <section class="register-photo mt-5" style="background: rgb(255,255,255);">
+        <div class="form-container">
+            <div class="image-signup" style="width: 40%;"></div>
+            <form method="post">
+                <h2 class="text-center">Create an account.</h2>
+                <div class="row">
+                    <span id="from_error" class="text-danger" style="font-size:13px"></span>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="username">Username</label>
+                            <input class="form-control" type="text" name="username" id="username" >
+                            <span id="username-error" class="text-danger" style="font-size:13px"></span>
+                    </div>
+                    </div>
+                    <div class="col">
+                        
+                        <div class="mb-3">
+                            <label for="name">Name</label>
+                            <input class="form-control" type="text" name="name" id="name" >
+                            <span id="name-error" class="text-danger" style="font-size:13px"></span>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="email">Email </label>
+                    <input class="form-control" type="email" name="email" id="email">
+                    <span id="email-error" class="text-danger" style="font-size:13px"></span>
+               
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="mobile">Mobile</label>
+                            <input class="form-control" type="text" name="mobile" id="mobile" >
+                            <span id="mobile-error" class="text-danger" style="font-size:13px"></span>
+                        
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="date">DOB</label>
+                        <div class="mb-3"><input class="form-control" type="date" name="date" id="date" placeholder="DOB">
+                        <span id="date-error" class="text-danger" style="font-size:13px"></span>
+
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="pincode">Pincode</label>
+                    <input class="form-control" type="text" name="pincode" id="pincode" >
+                    <span id="pincode-error" class="text-danger" style="font-size:13px"></span>
+                </div>
+                <!-- <div class="row">
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="state">State</label>
+                            <input class="form-control" type="text" name="state" id="state" ></div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <label for="city">City</label>
+                            <input class="form-control" type="text" name="city"  id="city"></div>
+                    </div>
+                </div> -->
+                <div>
+                    <label for="address">Address</label>
+                    <textarea class="form-control" rows="5" placeholder="" name="address" id="address"></textarea>
+                    <span id="address-error" class="text-danger" style="font-size:13px"></span>
+                
+                </div>
+                <div class="mb-3">
+                    <label for="password">Password</label>
+                    <input class="form-control" type="password" name="password" id="password">
+                <span id="password-error" class="text-danger" style="font-size:13px"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="password-repeat">Confrim password</label>
+                        <input class="form-control" type="password" name="password-repeat" id="password-repeat" >
+                    <span id="password-repeat-error" class="text-danger" style="font-size:13px"></span>
+                </div>
+                
+                <!-- <div class="mb-3"></div> -->
+                <!-- <div class="mb-3"></div> -->
+                <div class="mb-3">
+                    <div class="form-check"><label class="form-check-label"><input class="form-check-input" onclick="showpassword()" type="checkbox">Show password</label></div>
+                </div>
+                <div class="mb-3"><button class="btn btn-primary d-block w-100" id="signup" type="button">SignUp</button></div><a class="already" href="login" style="text-align: left;">You already have an account? Login here.</a>
+                <!-- <div class="mb-3"></div> -->
+                <div></div>
+            </form>
+        </div>
+    </section>
+    {% endblock mainblock%} 
+
+
+    {% block js %}
+<script>
+    $("input:checkbox:checked"). attr("checked", "");
+    function showpassword() {
+        let x = document.getElementById("password");
+        let y = document.getElementById("password-repeat");
+
+        if (x.type === "password") {
+          x.type = "text";
+          y.type = "text";
+
+        } else {
+          x.type = "password";
+          y.type = "password";
+
+        }
+      }
+
+</script>
+
+   
+    <script >
+ $(document).ready(function() {
+
+    $("#signup").click(function(){
+
+        $("#signup").attr("disabled",true)
+        $("#signup").html('<i class="fa fa-spinner fa-spin"></i> Loading...')
+        let emailregex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        let mob_regex=/^[0][1-9]\d{9}$|^[1-9]\d{9}$/
+        let picode_regex =/^[1-9][0-9]{5}$/
+
+        function showerror(tag,errortag){
+            if(tag.val().length==0){
+                errortag.html("Required *")
+                tag.addClass("errorborder")
+                return false
+            }else{
+                tag.removeClass("errorborder")
+                return true
+            }
+        }
+
+        function validate(type,tag,errortag){
+
+            if(type=="phone"){
+                if(!tag.val().match(mob_regex)){
+                    errortag.html("Invalid Phone number")
+                    tag.addClass("errorborder")
+                    return false
+                   }
+                   else{
+                    tag.removeClass("errorborder")
+                    return true
+                   }
+            }
+
+
+            if(type=="email"){
+                if(!tag.val().match(emailregex)){
+                    errortag.html("Invalid EmailID")
+                    tag.addClass("errorborder")
+                    return false
+                    }
+                    else{
+                    tag.removeClass("errorborder")
+                    return true
+                    }
+                }
+
+
+            if(type=="pincode"){
+                if(!tag.val().match(picode_regex)){
+                    errortag.html("Invalid Pincode")
+                    tag.addClass("errorborder")
+                    return false
+                    }
+                    else{
+                    tag.removeClass("errorborder")
+                    return true
+                    }
+                }
+    
+            if (type=="password"){
+                if(tag.val().length<8 || tag.val().length >32){
+                    errortag.html("Password should be at least 8/32 characters ")
+                    tag.addClass("errorborder")
+                    return false
+                    }
+                    else{
+                    tag.removeClass("errorborder")
+                    return true
+                    }
+                } 
+
+            if(type=="cfp"){
+                if(tag.val()!=password.val()){
+                    errortag.html("Invalid")
+                    tag.addClass("errorborder")
+                    return false
+                    }
+                    else{
+                    tag.removeClass("errorborder")
+                    return true
+                    }
+            }
+
+
+
+            }
+            
+
+        
+        let username=$("#username")
+        let name=$("#name")
+        let email=$("#email")
+        let mobile=$("#mobile")
+        let dob=$("#date")
+        let pincode=$("#pincode")
+        let address=$("#address")
+        let password=$("#password")
+        let password_repeat=$("#password-repeat")
+        
+        let usernameerror=$("#username-error")
+        let nameerror=$("#name-error")
+        let emailerror=$("#email-error")
+        let mobileerror=$("#mobile-error")
+        let doberror=$("#date-error")
+        let pincodeerror=$("#pincode-error")
+
+        let addresserror=$("#address-error")
+        let passworderror=$("#password-error")
+        let password_repeaterror=$("#password-repeat-error")
+        
+        usernameerror.html("")
+        nameerror.html("")
+        emailerror.html("")
+        mobileerror.html("")
+        doberror.html("")
+        pincodeerror.html("")
+        
+        addresserror.html("")
+        passworderror.html("")
+        password_repeaterror.html("")
+        
+        let error1=true,error2=true,error3=true,error4=true,error5=true,error6=true,error7=true,error8=true,error9=true;
+        error1=showerror(username,usernameerror)
+        error2=showerror(name,nameerror)
+        error3=showerror(email,emailerror)
+        error4=showerror(mobile,mobileerror)
+        error5=showerror(pincode,pincodeerror)
+        error6=showerror(dob,doberror)
+        error7=showerror(address,addresserror)
+        error8=showerror(password,passworderror)
+        error9=showerror(password_repeat,password_repeaterror)
+        
+        if(error3){
+            error3=validate("email",email,emailerror)
+        }
+        if(error4){
+            error4=validate("phone",mobile,mobileerror)
+        }
+        if(error5){
+            error5=validate("pincode",pincode,pincodeerror)
+        }
+
+        if(error8){
+            error8=validate("password",password,passworderror)
+        }
+       
+        if(error9){
+            error9=validate("cfp",password_repeat,password_repeaterror)
+        }
+
+        if(error1 && error2 && error3 && error4 && error5 && error6 && error7 && error8 && error9){
+            console.log()
+$.ajax({
+       url:"signup",
+       method:"POST",
+       data: $("form").serialize(),
+       success: function(data){
+          
+           if(data.error==0){
+               window.location="login"
+           }else{
+               $("#from_error").html(from_error)
+               $("#signup").attr("disabled",false)
+                $("#signup").html('Signup')
+           }
+       },
+       error: function(data){
+        $("#from_error").html("Server error")
+        $("#signup").attr("disabled",false)
+        $("#signup").html('Signup')
+       }
+  })
+        }else{
+            $("#signup").attr("disabled",false)
+            $("#signup").html('Signup')  
+        }
+        
+        
+        
+      
+    })
+
+
+
+
+ })  
+
+
+    </script>
+
+
+    {% endblock js %}

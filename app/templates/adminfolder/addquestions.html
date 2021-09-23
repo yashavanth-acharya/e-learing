@@ -1,0 +1,266 @@
+
+{% extends "adminfolder/base.html" %}
+
+{% load static %}
+
+{% block title %}
+Questions
+{% endblock title %} 
+{% block style %}
+<style>
+    .errorlable{
+        color: red
+    }
+    .errorborder{
+        border:1px solid red;
+    }
+</style>
+
+{%endblock style %}
+{% block content %}
+<div class="container-fluid">
+    <h3 class="text-dark mb-4">Questions</h3>
+    <p class="text-primary m-0 fw-bold" id="msg"></p>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <button class="btn btn-primary float-right" data-bs-toggle="modal" data-bs-target="#modal1" type="button">Add Question</button>
+           
+            
+        </div>
+        <div class="card-body">
+            <div class="row table-responsive">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Questions</th>
+                            <th>Options1</th>
+                            <th>Options2</th>
+                            <th>Options3</th>
+                            <th>Options4</th>
+                            <th>Answer</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Action</th>
+
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Questions</th>
+                            <th>Options1</th>
+                            <th>Options2</th>
+                            <th>Options3</th>
+                            <th>Options4</th>
+                            <th>Answer</th>
+                            <th>createAt</th>
+                            <th>updatedAt</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+</div>
+</div>
+<div class="modal fade" id="modal1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add new Questions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg1"></span>
+
+          <div class="col-12">
+            <div class="form-floating">
+              <textarea class="form-control"  id="Question" style="height: 100px"></textarea>
+              <label for="Question" id="Question-error">Question</label>
+          </div>
+          <span id="Questionerror" class="text-danger">
+            
+            </span>  
+          </div>
+
+            <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="Options1" placeholder="">
+                <label for="Options1" id="Options1-error" >Options1</label>
+              </div>
+              <span id="Options1error" class="text-danger"></span>
+            </div>
+            
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control " id="Options2" placeholder="">
+                    <label for="Options2" id="Options2-error" >Options2</label>
+                    </div>
+                    <span id="Options2error" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control " id="Options3" placeholder="">
+                    <label for="Options3" id="Options3-error" >Options3</label>
+                    </div>
+                    <span id="Options3error" class="text-danger">
+                    </span>
+            </div>
+
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control " id="Options4" placeholder="">
+                    <label for="Options4" id="Options4-error" >Options4</label>
+                    </div>
+                    <span id="Options4error" class="text-danger">
+                    </span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                <select class="form-select" id="answers" aria-label="Select answer">
+                    <option value="" selected>Open this select menu</option>
+                    <option value="Options1">Options1</option>
+                    <option value="Options2">Options2</option>
+                    <option value="Options3">Options3</option>
+                    <option value="Options4">Options4</option>
+                    </select>
+                <label for="answer" id="answer-error" >Select Answer</label>
+              </div>
+              <span id="answererror" class="text-danger">
+              </span>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="addquestion" >Add</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+  
+
+
+  <div class="modal fade" id="modal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable modal-lg">
+        <form method="post" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Edit new Questions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <span id="errormsg2"></span>
+
+          <div class="col-12">
+            <div class="form-floating">
+              <textarea class="form-control"  id="editQuestion" style="height: 100px"></textarea>
+              <label for="editQuestion" id="editQuestion-error">Question</label>
+          </div>
+          <span id="Questionerror" class="text-danger">
+            
+            </span>  
+          </div>
+
+            <div class="col-12">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control " id="editOptions1" placeholder="">
+                <label for="editOptions1" id="editOptions1-error" >Options1</label>
+              </div>
+              <span id="editOptions1error" class="text-danger"></span>
+            </div>
+            
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control " id="editOptions2" placeholder="">
+                    <label for="editOptions2" id="editOptions2-error" >Options2</label>
+                    </div>
+                    <span id="editOptions2error" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control " id="editOptions3" placeholder="">
+                    <label for="editOptions3" id="editOptions3-error" >Options3</label>
+                    </div>
+                    <span id="editOptions3error" class="text-danger">
+                    </span>
+            </div>
+
+            <div class="col-12">
+                    <div class="form-floating mb-3">
+                    <input type="text" class="form-control " id="editOptions4" placeholder="">
+                    <label for="editOptions4" id="editOptions4-error" >Options4</label>
+                    </div>
+                    <span id="editOptions4error" class="text-danger">
+                    </span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-floating mb-3">
+                <select class="form-select" id="editanswers" aria-label="Select answer">
+                    <option value="" selected>Open this select menu</option>
+                    <option value="Options1">Options1</option>
+                    <option value="Options2">Options2</option>
+                    <option value="Options3">Options3</option>
+                    <option value="Options4">Options4</option>
+                    </select>
+                <label for="editanswer" id="editanswer-error" >Select Answer</label>
+              </div>
+              <span id="editanswererror" class="text-danger">
+              </span>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="editquestion" >Update</button>
+        </div>
+      </div>
+    </form>
+    </div>
+  </div>
+
+
+ 
+
+{% endblock content%} 
+{% block js %}
+<script src="{% static 'js/addquestions.js' %}"></script>
+<script src="{% static 'js/editquestions.js' %}"></script> 
+<script>
+  
+  function deletequestion(id){
+    if (confirm("Are you sure you want to delete")){
+      $.ajax({
+        url:"deletequestion",
+        method:"GET",
+        data:{"questionid":id},
+        success:function(data){
+          
+            if(data.error==0){
+              echo=`<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }else{
+              echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Done</strong> `+data.msg+`.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>`
+              $("#msg").append(echo)
+            }
+            $('#example').DataTable().ajax.reload();
+        }
+    })
+    }
+} 
+
+</script>
+{% endblock js %}

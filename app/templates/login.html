@@ -1,0 +1,36 @@
+{% extends "index.html"%}
+
+{% load static %}
+
+{% block title %}
+Login
+{% endblock title %} 
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/Registration-Form-with-Photo.css'%}">
+{% endblock style %}
+
+{% block mainblock %}
+    <section class="text-center register-photo" style="background: rgb(255,255,255);text-align: left;transform: translate(0px) translateY(126px);">
+        <div class="form-container">
+            <div class="image-holder">
+                <form class="text-start" method="post">
+                    <h2 class="text-center"><strong>Login</strong></h2>
+                    {% if error %}
+                    <p class="text-danger"> {{msg}}</p>   
+                    {% endif %}
+                    <div class="mb-3"><input class="form-control" type="text" name="username" placeholder="username"></div>
+                    <div class="mb-3"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+                    <div class="mb-3"></div>
+                    <div class="mb-3">
+                        <div class="form-check"><label class="form-check-label"><input class="form-check-input" type="checkbox">I agree to the license terms.</label></div>
+                    </div>
+                    <div class="mb-3"><button class="btn btn-primary d-block w-100" type="submit">Login</button></div><a class="text-start already" href="signup">Do you have account? Signup.</a>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock mainblock%} 
+
+
+{% block js %}
+{% endblock js %}

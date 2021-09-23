@@ -1,0 +1,156 @@
+{% extends "index.html"%}
+
+{% load static %}
+
+{% block title %}
+Result
+{% endblock title %} 
+{% block style%}
+<link rel="stylesheet" href="{% static 'css/Features-Boxed.css' %}">
+{% endblock style %} 
+
+{% block mainblock %}
+
+<div class="container-fluid" style="height:100vh">
+ 
+   
+    <div class="card shadow p-4" style="margin-top:10em">
+        
+        <h3 class="text-dark mb-4">Result</h3>
+        <p id="msg"></p>
+        <div class="card-body">
+            <div class="row table-responsive">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Topic</th>
+                            <th>Marks</th>
+                            <th>Out of</th>
+                            <th>Submited At</th>
+                            <th>Status</th>
+                            <th>Feedback</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>S.no</th>
+                            <th>Topic</th>
+                            <th>Marks</th>
+                            <th>Out of</th>
+                            <th>Submited At</th>
+                            <th>Status</th>
+                            <th>Feedback</th>
+
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+</div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="#" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-floating">
+                <textarea class="form-control"  id="feedback" style="height: 100px"></textarea>
+                <label for="feedback" id="feedback-error">Feedback</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+        
+          <button type="button" id="btn"  class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+
+    {% endblock mainblock%} 
+
+
+    {% block js %}
+   <script>
+
+    let tables=$('#example').DataTable({
+        "processing": true,
+        "pageLength": 10,
+    ajax: 'getresults',
+    
+    });
+    
+
+ function feedback(id){
+    $("#msg").empty()
+     $("#btn").click(function(){
+        $("#btn").html('<i class="fa fa-spinner fa-spin"></i> Loading...')
+        $("#btn").attr("disabled",true)
+        function showerror(tag,errortag){
+            if(tag.val().length==0){
+                errortag.html("Required *")
+                tag.addClass("errorborder")
+                return false
+            }else{
+                tag.removeClass("errorborder")
+                return true
+            }
+        }
+
+
+        let feedback = $("#feedback")
+        let feedback_error = $("#feedback-error")
+        let error =showerror(feedback,feedback_error)
+        if(error){
+            $.ajax({
+                url:"/feedback",
+                method:"POST",
+                data:{"id":id,"feedback":$("#feedback").val()},
+                success:function(data){
+
+                if(data.error==0){
+
+                    echo=`<div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>Done</strong> `+data.data+`.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`
+                        $("#staticBackdrop").modal('hide');
+                        tables.ajax.reload()
+
+                    }else{
+
+                    echo=`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Done</strong> `+data.data+`.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>`
+
+                    }
+
+                    $("#msg").append(echo)
+                    $("#btn").html('Submit')
+                    $("#btn").attr("disabled",false)
+                }
+            }) 
+
+        }
+       
+
+
+     })
+  
+ }
+    
+
+   </script>
+    {% endblock js %}
+
+    

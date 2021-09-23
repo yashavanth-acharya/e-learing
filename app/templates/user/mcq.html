@@ -1,0 +1,110 @@
+{% extends "index.html"%}
+
+{% load static %}
+
+{% block title %}
+Topic
+{% endblock title %} 
+{% block style%}
+ <style>
+     span{
+         margin: 10px;
+         display: block;
+     }
+     .timer-container{
+        margin-top: 14em;
+        margin-top:-8em;
+        z-index: 1;
+        width:100%
+    }
+     @media (max-width:900px){
+        .timer-container{
+            margin-top: -11em;
+        }
+     }
+ </style>
+{% endblock style %} 
+
+{% block mainblock %}
+
+
+<div class="container" style="margin-top: 14em;height:50em !important">
+    <div class="container position-fixed bg-white p-3 w-100 timer-container" >   
+        <span style="display:flex;align-content: center;">Timmer:<span style="margin-top:0px;" id = "timebox"></span> </span>
+ 
+    </div>
+    {% if data %}
+    <form action="" method="post">
+    {% with count=1 %} 
+{%for info in data %}
+
+<div class="card mt-3" >
+    <div class="card-body">
+        <div class="question">
+            <span>{{ forloop.counter }}. <b>{{info.0}}</b> </span>
+            <input type="hidden" name="question[]" id="question" value="{{info.5}}">
+        </div>
+        <div class="options">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="option{{ forloop.counter }}[]" id="option" value="{{info.1}}" >
+                <label class="form-check-label" for="option">
+                    {{info.1}}
+                </label>
+               
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="option{{ forloop.counter }}[]" id="option" value="{{info.2}}" >
+                <label class="form-check-label" for="option">
+                    {{info.2}}
+                </label>
+              </div><div class="form-check">
+                <input class="form-check-input" type="radio" name="option{{ forloop.counter }}[]" id="option" value="{{info.3}}" >
+                <label class="form-check-label" for="option">
+                    {{info.3}}
+                </label>
+              </div><div class="form-check">
+                <input class="form-check-input" type="radio" name="option{{ forloop.counter }}[]" id="option" value="{{info.4}}" >
+                <label class="form-check-label" for="option">
+                    {{info.4}}
+                </label>
+              </div>
+        </div>
+        </div>
+        
+    </div>
+
+{% endfor %}
+<div class="button mt-5 mb-5">
+    <button type="submit" class="btn btn-success">Submit</button>
+</div>
+{% endwith %}
+</form>
+{% endif %}
+</div>
+
+    {% endblock mainblock%} 
+
+
+    {% block js %}
+    <script>
+       
+        var deadline = new Date("{{endtime}}").getTime();
+        var x = setInterval(function() {
+        var now = new Date().getTime();
+        var t = deadline - now;
+       // var days = Math.floor(t / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((t%(1000 * 60 * 60 * 24))/(1000 * 60 * 60));
+        var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((t % (1000 * 60)) / 1000);
+        document.getElementById("timebox").innerHTML = hours + ":" + minutes + ":" + seconds
+            if (t < 0) {
+                clearInterval(x);
+                $("form").submit();
+                document.getElementById("timebox").innerHTML = "EXPIRED";
+            }
+        }, 1000);
+     
+    </script>
+   
+   
+    {% endblock js %}
